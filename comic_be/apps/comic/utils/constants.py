@@ -15,7 +15,9 @@ class AppStatus(Enum):
     EMAIL_ALREADY_EXIST = "EMAIL_ALREADY_EXIST", 400, "Email already exist."
     EXPIRED_VERIFY_CODE = 'EXPIRED_VERIFY_CODE', 400, 'Your code is expired.'
     INVALID_VERIFY_CODE = "INVALID_VERIFY_CODE", 400, "Your code is invalid."
-    COMIC_ALREADY_EXIST = "COMIC_ALREADY_EXIST", 400, "Comic already exist hihihi."
+    COMIC_ALREADY_EXIST = "COMIC_ALREADY_EXIST", 400, "Comic already exist."
+    COMIC_NAME_ALREADY_EXIST = "COMIC_NAME_ALREADY_EXIST", 400, "Comic name already exist."
+    AUTHOR_NAME_ALREADY_EXIST = "AUTHOR_NAME_ALREADY_EXIST", 400, "Author name already exist."
     USERNAME_ALREADY_EXIST = "USERNAME_ALREADY_EXIST", 400, "Username already exist."
     USER_NOT_HAVE_ENOUGH_PERMISSION = "USER_NOT_HAVE_ENOUGH_PERMISSION", 400, "User does not have enough permission."
 

@@ -1,11 +1,11 @@
 from rest_framework import mixins
 
 from comic_be.apps.comic.serializers import (
-    AuthorSerializers, AuthorCreateSerializer, serializers, Response
+    AuthorSerializers, AuthorCreateSerializer, AuthorUpdateSerializer, serializers
 )
 from comic_be.apps.comic.views_container import (
     swagger_auto_schema, openapi, permission_crud_comic,
-    LimitOffsetPagination, GenericViewSet, MultiPartParser, FormParser, Author, AppStatus
+    LimitOffsetPagination, GenericViewSet, MultiPartParser, FormParser, Author, AppStatus, Response
 )
 
 
@@ -19,6 +19,8 @@ class AuthorViewSet(GenericViewSet, mixins.CreateModelMixin,
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return AuthorCreateSerializer
+        if self.request.method == 'PUT':
+            return AuthorUpdateSerializer
         return AuthorSerializers
 
     def get_queryset(self):
