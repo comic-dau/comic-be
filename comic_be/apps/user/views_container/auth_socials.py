@@ -1,12 +1,10 @@
-import urllib.parse
-
 from django.shortcuts import redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from comic_be import settings
 from comic_be.apps.user.serializers_container.auth_socials import (
-    SocialUserSerializer, LogoutSerializer,RedirectSerializer, CookiesSerializer
+    SocialUserSerializer, LogoutSerializer, RedirectSerializer, CookiesSerializer
 )
 
 
@@ -45,7 +43,7 @@ class CookiesAPIView(APIView):
     def get(self, request):
         serializer = CookiesSerializer(data={}, context={'request': request})
         if serializer.is_valid():
-            return Response(serializer.validated_data, status=200)
+            return Response(serializer.get_cookies(), status=200)
         return Response({'error': serializer.errors}, status=400)
 
 

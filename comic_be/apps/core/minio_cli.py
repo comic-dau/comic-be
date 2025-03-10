@@ -62,7 +62,7 @@ class MinioStorage:
             parsed_url = urlparse(url)
             url_path = parsed_url.path.strip("/")
             parts = url_path.split("/")
-            bucket = parts[0]
+            bucket = parts[1]
             filename = "/".join(parts[1:])
             self.client.remove_object(bucket, filename)
         except InvalidResponseError as err:

@@ -10,9 +10,7 @@ User = get_user_model()
 
 
 class CookiesSerializer(serializers.Serializer):
-    cookies = serializers.SerializerMethodField()
-
-    def get_cookies(self, obj):
+    def get_cookies(self):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             return f'csrftoken={request.COOKIES.get("csrftoken")}; sessionid={request.COOKIES.get("sessionid")}'
