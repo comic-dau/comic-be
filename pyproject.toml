@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "comic-be"
+version = "0.1.0"
+description = ""
+authors = ["QV <vietgym007@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+djangorestframework = "3.14.0"
+python-dotenv = "^1.0.0"
+psycopg2-binary = "^2.9.9"
+pillow = "^10.1.0"
+djangorestframework-simplejwt = "^5.3.1"
+django-rest-swagger = "^2.2.0"
+pyyaml = "^6.0.1"
+django = "4.0"
+drf-yasg = "^1.21.7"
+django-cors-headers = "^4.3.1"
+pusher = "3.3.0"
+firebase-admin = "^6.5.0"
+django-ratelimit = "4.1.0"
+django-allauth = "65.4.1"
+loguru = "0.7.3"
+minio = "7.2.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
