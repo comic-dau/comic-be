@@ -1,4 +1,3 @@
-from django.contrib.admin import action
 from rest_framework import mixins
 
 from comic_be.apps.comic.serializers import (
@@ -68,5 +67,10 @@ class ComicViewSet(GenericViewSet, mixins.CreateModelMixin,
         instance = self.get_object()
         instance.delete()
         return Response(AppStatus.SUCCESS.message)
+
+
+# class ComicChapterViewSet(GenericViewSet):
+#     queryset = Comic.objects.all()
+
 
 

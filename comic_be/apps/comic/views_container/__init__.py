@@ -21,6 +21,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from comic_be.apps.user.models import User
 from comic_be.apps.comic.models import Comic
 from comic_be.apps.comic.models import Author
+from comic_be.apps.comic.models import Chapter
 from comic_be.apps.comic.utils.constants import AppStatus
 from comic_be.apps.comic.utils.valid_data import check_validate_genres
 from comic_be.apps.comic.utils.permission import permission_crud_comic, permission_user
