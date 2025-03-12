@@ -16,7 +16,6 @@ class AuthorBaseSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.minio_cli = MinioStorage()
-        self.bucket = settings.STORAGE_BUCKET
 
     class Meta:
         model = Author
@@ -26,7 +25,7 @@ class AuthorBaseSerializer(serializers.ModelSerializer):
 class AuthorCreateSerializer(AuthorBaseSerializer):
     def handel_image(self, image, name_author):
         file_path = f'author/{name_author}/{image.name}'
-        uri = self.minio_cli.upload_file(self.bucket, file_path, image, return_url=True)
+        uri = self.minio_cli.upload_file(settings.STORAGE_BUCKET, file_path, image, return_url=True)
         return uri
 
     def create(self, validated_data):

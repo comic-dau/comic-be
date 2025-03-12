@@ -1,4 +1,5 @@
 import random
+import zipfile
 from datetime import timedelta
 
 from os.path import join
@@ -9,6 +10,7 @@ from django.core.mail import send_mail
 from rest_framework import serializers
 from django.utils.html import strip_tags
 from rest_framework.response import Response
+from django.core.files.base import ContentFile
 
 # from namanga.setting.path import cfg
 from comic_be.apps.comic.models import *
@@ -18,4 +20,3 @@ from comic_be.apps.comic.utils.permission import permission_crud_comic
 from comic_be.apps.comic.models_container.enum_type import ComicGenreEnum
 from comic_be.apps.core.minio_cli import MinioStorage
 from comic_be.apps.comic.utils.valid_data import check_validate_genres
-
