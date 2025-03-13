@@ -6,7 +6,7 @@ from comic_be.apps.comic.serializers import (
 )
 from comic_be.apps.comic.views_container import (
     swagger_auto_schema, openapi, permission_crud_comic, LimitOffsetPagination, GenericViewSet,
-    MultiPartParser, FormParser, Chapter, AppStatus, Response
+    MultiPartParser, FormParser, Chapter, AppStatus, Response, History, Comic
 )
 
 
@@ -62,5 +62,20 @@ class ChapterViewSet(GenericViewSet, mixins.CreateModelMixin,
         return Response(AppStatus.SUCCESS.message)
 
 
-class ChapterViewUpdateViewSet(UpdateAPIView):
-    pass
+class ChapterReadUpdateViewSet(UpdateAPIView):
+    queryset = Chapter.objects.all()
+    serializer_class = None
+
+    def update(self, request, *args, **kwargs):
+        current_user = self.request.user
+        instance = self.get_object()
+        comic = instance.comic
+        instance.views += 1
+        comic.views += 1
+
+        instance.save(update_fields=["views"])
+        comic.save(update_fields=["views"])
+
+        if current_user.is_authenticated:
+            History.objects.create(user=current_user, chapter=instance, comic=comic)
+        return Response(AppStatus.SUCCESS.message)
