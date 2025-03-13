@@ -37,7 +37,7 @@ class ComicViewSet(GenericViewSet, mixins.CreateModelMixin,
             check_validate_genres(genres)
             queryset = queryset.filter(genres__contains=genres)
 
-        queryset = queryset.order_by("-created_at")
+        queryset = queryset.order_by("-updated_at")
         return queryset
 
     @swagger_auto_schema(

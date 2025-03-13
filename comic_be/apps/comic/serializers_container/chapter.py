@@ -1,5 +1,5 @@
 from comic_be.apps.comic.serializers_container import (
-    serializers, Chapter, Comic, Author, zipfile, ContentFile, settings, permission_crud_comic, AppStatus
+    serializers, Chapter, zipfile, ContentFile, settings, permission_crud_comic, timezone
 )
 from comic_be.apps.core.minio_cli import MinioStorage
 
@@ -74,6 +74,8 @@ class ChapterCreateSerializer(serializers.ModelSerializer):
         validated_data['src_image'] = self.provider_src_image(zip_file, comic.name, number_chapter)
 
         chapter = Chapter.objects.create(**validated_data)
+        comic.update_at = timezone.now()
+        comic.save()
         return chapter
 
 
@@ -89,6 +91,3 @@ class ChapterUpdateSerializer(serializers.ModelSerializer):
             setattr(instance, field, value)
         instance.save()
         return instance
-
-
-
