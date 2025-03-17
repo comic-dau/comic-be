@@ -1,4 +1,6 @@
 from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -30,15 +32,15 @@ class LogoutAPIView(APIView):
         return Response({"error": serializer.errors}, status=400)
 
 
+@method_decorator(ensure_csrf_cookie, name='get')
 class FirstLoginAPIView(APIView):
     def get(self, request):
-        serializer = RedirectSerializer(data={}, context={'request': request})
-        if serializer.is_valid():
-            redirect_url = serializer.get_redirect_url()
-            return redirect(redirect_url)
-        return Response({'error': serializer.errors}, status=400)
+        serializer = RedirectSerializer(context={'request': request})
+        redirect_url = serializer.get_redirect_url()  # Gọi hàm lấy redirect_url
+        return redirect(redirect_url)
 
 
+@method_decorator(ensure_csrf_cookie, name='get')
 class CookiesAPIView(APIView):
     def get(self, request):
         serializer = CookiesSerializer(data={}, context={'request': request})

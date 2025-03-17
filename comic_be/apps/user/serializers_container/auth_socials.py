@@ -25,7 +25,8 @@ class RedirectSerializer(serializers.Serializer):
                 'cookies': f'csrftoken={request.COOKIES.get("csrftoken")}; sessionid={request.COOKIES.get("sessionid")}'
             }
             query_string = urllib.parse.urlencode(cookies_data)
-            return f"{settings.FE_URL}?{query_string}"
+            return f"{settings.FE_URL}/login-callback/?{query_string}"
+            # return f"{settings.FE_URL}?{query_string}"
         raise serializers.ValidationError("Authentication failed")
 
 
