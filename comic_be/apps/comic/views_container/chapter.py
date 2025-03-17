@@ -1,12 +1,10 @@
-from rest_framework import mixins
-from rest_framework.generics import UpdateAPIView
-
 from comic_be.apps.comic.serializers import (
     ChapterSerializers, ChapterCreateSerializer, ChapterUpdateSerializer, serializers,
 )
 from comic_be.apps.comic.views_container import (
-    swagger_auto_schema, openapi, permission_crud_comic, LimitOffsetPagination, GenericViewSet,
-    MultiPartParser, FormParser, Chapter, AppStatus, Response, History, Comic
+    swagger_auto_schema, openapi, permission_crud_comic, LimitOffsetPagination, GenericViewSet, UpdateAPIView,
+    MultiPartParser, FormParser, Chapter, AppStatus, Response, History, CsrfExemptSessionAuthentication, mixins,
+    SessionAuthentication
 )
 
 
@@ -65,6 +63,7 @@ class ChapterViewSet(GenericViewSet, mixins.CreateModelMixin,
 class ChapterReadUpdateViewSet(UpdateAPIView):
     queryset = Chapter.objects.all()
     serializer_class = None
+    authentication_classes = [CsrfExemptSessionAuthentication, SessionAuthentication]
 
     def update(self, request, *args, **kwargs):
         current_user = self.request.user
@@ -77,5 +76,5 @@ class ChapterReadUpdateViewSet(UpdateAPIView):
         comic.save(update_fields=["views"])
 
         if current_user.is_authenticated:
-            History.objects.create(user=current_user, chapter=instance, comic=comic)
+            History.objects.create(user=current_user, content="READ COMIC", chapter=instance, comic=comic)
         return Response(AppStatus.SUCCESS.message)

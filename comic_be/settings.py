@@ -158,7 +158,14 @@ STORAGE_SECURE = os.environ.get('STORAGE_SECURE')
 SECRET_KEY_BUCKET = os.environ.get('SECRET_KEY')
 
 FE_URL = os.environ.get('FE_URL', 'http://localhost:8501')
-
+# CORS_ALLOWED_ORIGINS = [
+#     "https://comic.daihiep.click",  # Miền của frontend
+# ]
+# CSRF_COOKIE_SECURE = False
+CSRF_TRUSTED_ORIGINS = [
+    'https://comic.daihiep.click',  # Miền cần được thêm đầy đủ
+]
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
