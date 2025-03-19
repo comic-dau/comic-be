@@ -77,7 +77,7 @@ ROOT_URLCONF = 'comic_be.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['comic_be/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

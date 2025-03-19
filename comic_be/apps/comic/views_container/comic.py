@@ -68,9 +68,3 @@ class ComicViewSet(GenericViewSet, mixins.CreateModelMixin,
         instance.delete()
         return Response(AppStatus.SUCCESS.message)
 
-
-# class ComicChapterViewSet(GenericViewSet):
-#     queryset = Comic.objects.all()
-
-
-

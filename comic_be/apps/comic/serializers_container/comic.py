@@ -1,6 +1,6 @@
 from comic_be.apps.comic.serializers_container import (
     Comic, Chapter, serializers, permission_crud_comic, AppStatus, MinioStorage, settings,
-    check_validate_genres, Author
+    check_validate_genres, Author, create_preview_image
 )
 
 
@@ -30,6 +30,7 @@ class ComicBaseSerializer(serializers.ModelSerializer):
     background_image_upload = serializers.ImageField(required=True, allow_null=False, write_only=True)
     image = serializers.CharField(read_only=True)
     background_image = serializers.CharField(read_only=True)
+    preview_image = serializers.CharField(read_only=True)
 
 
     def __init__(self, *args, **kwargs):
@@ -45,7 +46,7 @@ class ComicBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comic
         fields = ['name', 'author', 'introduction', 'genres', 'image', 'background_image', 'image_upload',
-                  'background_image_upload']
+                  'preview_image', 'background_image_upload']
 
 
 class ComicCreateSerializer(ComicBaseSerializer):
@@ -64,6 +65,9 @@ class ComicCreateSerializer(ComicBaseSerializer):
 
         image_upload = validated_data.pop('image_upload')
         validated_data['image'] = self.handel_image(image_upload, validated_data['name'])
+
+        image_preview = create_preview_image(image_upload)
+        validated_data['preview_image'] = self.handel_image(image_preview, validated_data['name'])
 
         background_image_upload = validated_data.pop('background_image_upload')
         validated_data['background_image'] = self.handel_image(background_image_upload, validated_data['name'])
@@ -110,6 +114,9 @@ class ComicUpdateSerializer(ComicBaseSerializer):
         image_upload = validated_data.pop('image_upload', None)
         if image_upload:
             validated_data['image'] = self.handel_update_image(instance.image, image_upload, name_comic)
+            image_preview = create_preview_image(image_upload)
+            validated_data['preview_image'] = self.handel_update_image(instance.preview_image,
+                                                                       image_preview, name_comic)
 
         background_image_upload = validated_data.pop('background_image_upload', None)
         if background_image_upload:

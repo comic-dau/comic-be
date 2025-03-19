@@ -10,6 +10,7 @@ class Comic(models.Model):
     introduction = models.TextField(null=True, blank=True)
     background_image = models.CharField(null=True, blank=True)
     image = models.CharField(null=True, blank=True)
+    preview_image = models.CharField(null=True, blank=True)
     views = models.IntegerField(default=0)
     total_chapter = models.IntegerField(null=True, blank=True, default=0)
     like = models.IntegerField(null=True, blank=True, default=0)

@@ -20,3 +20,4 @@ from comic_be.apps.comic.utils.permission import permission_crud_comic
 from comic_be.apps.comic.models_container.enum_type import ComicGenreEnum
 from comic_be.apps.core.minio_cli import MinioStorage
 from comic_be.apps.comic.utils.valid_data import check_validate_genres
+from comic_be.apps.comic.utils.preview_image import create_preview_image
