@@ -158,6 +158,7 @@ STORAGE_SECURE = os.environ.get('STORAGE_SECURE')
 SECRET_KEY_BUCKET = os.environ.get('SECRET_KEY')
 
 FE_URL = os.environ.get('FE_URL', 'http://localhost:8501')
+KEY_HASH_IMG = os.environ.get('KEY_HASH_IMG')
 # CORS_ALLOWED_ORIGINS = [
 #     "https://comic.daihiep.click",  # Miền của frontend
 # ]

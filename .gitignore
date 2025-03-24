@@ -157,3 +157,5 @@ dummy
 /database/postgres
 /database/sql
 /database/pgadmin
+
+/comic_be/test
