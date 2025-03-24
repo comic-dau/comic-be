@@ -1,11 +1,9 @@
-from rest_framework import mixins
-
 from comic_be.apps.comic.serializers import (
     ComicSerializers, ComicCreateSerializer, ComicUpdateSerializer, serializers,
 )
 from comic_be.apps.comic.views_container import (
     swagger_auto_schema, openapi, permission_crud_comic, LimitOffsetPagination, GenericViewSet,
-    MultiPartParser, FormParser, Comic, AppStatus, check_validate_genres, Response
+    MultiPartParser, FormParser, Comic, AppStatus, check_validate_genres, Response, mixins
 )
 
 

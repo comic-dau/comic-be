@@ -1,6 +1,6 @@
 from comic_be.apps.comic.serializers_container import (
     Comic, Chapter, serializers, permission_crud_comic, AppStatus, MinioStorage, settings,
-    check_validate_genres, Author, create_preview_image
+    check_validate_genres, Author, create_preview_image, timezone
 )
 
 
@@ -72,7 +72,7 @@ class ComicCreateSerializer(ComicBaseSerializer):
         background_image_upload = validated_data.pop('background_image_upload')
         validated_data['background_image'] = self.handel_image(background_image_upload, validated_data['name'])
 
-        comic = Comic.objects.create(**validated_data)
+        comic = Comic.objects.create(**validated_data, updated_at=timezone.now())
         return comic
 
 

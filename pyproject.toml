@@ -23,6 +23,8 @@ django-ratelimit = "4.1.0"
 django-allauth = "65.4.1"
 loguru = "0.7.3"
 minio = "7.2.15"
+numpy = "2.2.4"
+opencv-python = "23.2.1"
 
 [build-system]
 requires = ["poetry-core"]
