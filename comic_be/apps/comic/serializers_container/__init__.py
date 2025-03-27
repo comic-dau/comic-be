@@ -22,3 +22,6 @@ from comic_be.apps.core.minio_cli import MinioStorage
 from comic_be.apps.comic.utils.valid_data import check_validate_genres
 from comic_be.apps.comic.utils.preview_image import create_preview_image
 from comic_be.apps.comic.utils.shuffle_img import split_and_shuffle_image
+
+class EmptySerializer(serializers.Serializer):
+    pass

@@ -13,8 +13,7 @@ class Comic(models.Model):
     preview_image = models.CharField(null=True, blank=True)
     views = models.IntegerField(default=0)
     total_chapter = models.IntegerField(null=True, blank=True, default=0)
-    like = models.IntegerField(null=True, blank=True, default=0)
-    rating = models.IntegerField(null=True, blank=True, default=0)
+    reviews = models.JSONField(default={'likes': 0, 'rating': 0, 'number_of_user_rating': 0})
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField()

@@ -1,5 +1,5 @@
 from comic_be.apps.comic.serializers import (
-    ChapterSerializers, ChapterCreateSerializer, ChapterUpdateSerializer, serializers,
+    ChapterSerializers, ChapterCreateSerializer, ChapterUpdateSerializer, serializers, EmptySerializer
 )
 from comic_be.apps.comic.views_container import (
     swagger_auto_schema, openapi, permission_crud_comic, LimitOffsetPagination, GenericViewSet, UpdateAPIView,
@@ -11,7 +11,6 @@ from comic_be.apps.comic.views_container import (
 class ChapterViewSet(GenericViewSet, mixins.CreateModelMixin,
                      mixins.ListModelMixin, mixins.UpdateModelMixin):
     queryset = Chapter.objects.all()
-    # permission_classes = [permissions.IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
     pagination_class = LimitOffsetPagination
 
@@ -62,7 +61,7 @@ class ChapterViewSet(GenericViewSet, mixins.CreateModelMixin,
 
 class ChapterReadUpdateViewSet(UpdateAPIView):
     queryset = Chapter.objects.all()
-    serializer_class = None
+    serializer_class = EmptySerializer
     authentication_classes = [CsrfExemptSessionAuthentication, SessionAuthentication]
 
     def update(self, request, *args, **kwargs):

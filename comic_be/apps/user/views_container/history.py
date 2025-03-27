@@ -19,6 +19,8 @@ class HistoryViewSet(GenericViewSet, mixins.CreateModelMixin,
 
     def get_queryset(self):
         user = self.request.user
+        if user.is_anonymous:
+            return History.objects.none()
         comic = self.request.query_params.get("comic", None)
         chapter = self.request.query_params.get("chapter", None)
         queryset = History.objects.filter().all()
