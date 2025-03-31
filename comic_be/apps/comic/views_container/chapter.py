@@ -4,8 +4,9 @@ from comic_be.apps.comic.serializers import (
 from comic_be.apps.comic.views_container import (
     swagger_auto_schema, openapi, permission_crud_comic, LimitOffsetPagination, GenericViewSet, UpdateAPIView,
     MultiPartParser, FormParser, Chapter, AppStatus, Response, History, CsrfExemptSessionAuthentication, mixins,
-    SessionAuthentication
+    SessionAuthentication, DjangoFilterBackend, OrderingFilter
 )
+from comic_be.apps.comic.views_container.filter import ChapterFilter
 
 
 class ChapterViewSet(GenericViewSet, mixins.CreateModelMixin,
@@ -13,6 +14,9 @@ class ChapterViewSet(GenericViewSet, mixins.CreateModelMixin,
     queryset = Chapter.objects.all()
     parser_classes = [MultiPartParser, FormParser]
     pagination_class = LimitOffsetPagination
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = ChapterFilter
+    ordering = ["-created_at"]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -20,24 +24,6 @@ class ChapterViewSet(GenericViewSet, mixins.CreateModelMixin,
         if self.request.method == 'PUT':
             return ChapterUpdateSerializer
         return ChapterSerializers
-
-    def get_queryset(self):
-        comic = self.request.query_params.get("comic", None)
-        queryset = Chapter.objects.filter().all()
-        if comic:
-            queryset = queryset.filter(comic=comic)
-            if not queryset:
-                raise serializers.ValidationError(AppStatus.ID_INVALID.message)
-
-        queryset = queryset.order_by("-created_at")
-        return queryset
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(name="comic", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER), ]
-    )
-    def list(self, request, *args, **kwargs):
-        return super().list(self, request, *args, **kwargs)
 
     def get_object(self):
         chapter_id = self.kwargs['pk']

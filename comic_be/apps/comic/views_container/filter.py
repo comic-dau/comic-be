@@ -1,5 +1,5 @@
 from comic_be.apps.comic.views_container import (
-    filters, UserComic, Comic, check_validate_genres
+    filters, UserComic, Comic, check_validate_genres, Chapter
 )
 
 
@@ -24,3 +24,11 @@ class UserComicFilter(filters.FilterSet):
     class Meta:
         model = UserComic
         fields = ['comic']
+
+
+class ChapterFilter(filters.FilterSet):
+    comic = filters.BaseInFilter(field_name="comic")
+
+    class Meta:
+        model = Chapter
+        fields = ["comic"]

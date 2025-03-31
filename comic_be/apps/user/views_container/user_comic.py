@@ -1,12 +1,12 @@
 from comic_be.apps.comic.views_container import (
-    swagger_auto_schema, openapi, permission_crud_comic, LimitOffsetPagination, GenericViewSet, MultiPartParser,
+    permission_crud_comic, LimitOffsetPagination, GenericViewSet, MultiPartParser,
     FormParser, UserComic, AppStatus, Response, mixins, OrderingFilter, DjangoFilterBackend
 )
 from comic_be.apps.user.serializers_container.user_comic import (
     # UserComicSerializers, UserComicCreateSerializer, UserComicUpdateSerializer,
     UserComicSerializers, serializers, UserComicCreateSerializer
 )
-from comic_be.apps.user.views_container.filter import UserComicFilter
+from comic_be.apps.comic.views_container.filter import UserComicFilter
 
 
 class UserComicViewSet(GenericViewSet, mixins.CreateModelMixin,
