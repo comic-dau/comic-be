@@ -26,9 +26,11 @@ class UserComicCreateSerializer(serializers.ModelSerializer):
     @staticmethod
     def update_comic(comic, validated_data):
         review = comic.reviews
-        if validated_data['is_like']:
+        is_like = validated_data.get('is_like', None)
+        rating = validated_data.get('rating', None)
+        if is_like:
             review['likes'] += 1
-        if validated_data['rating']:
+        if rating:
             if review['rating']:
                 review['rating'] = ((validated_data['rating'] * review['number_of_user_rating'] + validated_data['rating'])
                                     / review['number_of_user_rating'] + 1)
@@ -40,7 +42,9 @@ class UserComicCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         current_user = self.context['request'].user
-        user_comic = UserComic.objects.create(**validated_data, user=current_user,
-                                              created_at=timezone.now(), updated_at=timezone.now())
+        user_comic = UserComic.objects.filter(user=current_user, comic=validated_data['comic']).first()
+        if not user_comic:
+            user_comic = UserComic.objects.create(**validated_data, user=current_user,
+                                                  created_at=timezone.now(), updated_at=timezone.now())
         self.update_comic(user_comic.comic, validated_data)
         return user_comic

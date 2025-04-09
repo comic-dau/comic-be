@@ -83,7 +83,7 @@ class ChapterCreateSerializer(serializers.ModelSerializer):
 
 
 class ChapterUpdateSerializer(serializers.ModelSerializer):
-    new_src_image = serializers.FileField(required=True, write_only=True)
+    new_src_image = serializers.FileField(required=False, write_only=True)
     src_image = serializers.CharField(read_only=True)
 
     def __init__(self, *args, **kwargs):
@@ -104,8 +104,8 @@ class ChapterUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         current_user = self.context['request'].user
         permission_crud_comic(current_user)
-        src_image = validated_data.pop('new_src_image')
-        if src_image:
+        if validated_data.get('new_src_image'):
+            src_image = validated_data.pop('new_src_image')
             instance.src_image = self.handel_update_src_image(instance, src_image)
         for field, value in validated_data.items():
             setattr(instance, field, value)
