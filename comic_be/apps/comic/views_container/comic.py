@@ -17,19 +17,6 @@ class ComicViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixi
     ordering_fields = ["name", "updated_at"]
     ordering = ["-updated_at"]
 
-    def filter_queryset(self, queryset):
-        """Truyền request vào filter để có thể truy cập user đang đăng nhập"""
-        # Xử lý DjangoFilterBackend riêng biệt để truyền request
-        for backend in list(self.filter_backends):
-            if backend == DjangoFilterBackend:
-                if self.filterset_class is not None:
-                    # Sử dụng filterset_class với request
-                    filterset = self.filterset_class(self.request.GET, queryset=queryset, request=self.request)
-                    queryset = filterset.qs
-            else:
-                # Xử lý các filter backend khác bình thường
-                queryset = backend().filter_queryset(self.request, queryset, self)
-        return queryset
 
     def get_serializer_class(self):
         if self.request.method == 'POST':

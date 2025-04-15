@@ -3,7 +3,7 @@ from rest_framework.authentication import SessionAuthentication
 from comic_be.apps.comic.views_container import (
     permission_crud_comic, LimitOffsetPagination, GenericViewSet, MultiPartParser,
     FormParser, UserComic, AppStatus, Response, mixins, OrderingFilter, DjangoFilterBackend,
-    CsrfExemptSessionAuthentication
+    CsrfExemptSessionAuthentication, swagger_auto_schema, openapi
 )
 from comic_be.apps.user.serializers_container.user_comic import (
     # UserComicSerializers, UserComicCreateSerializer, UserComicUpdateSerializer,
@@ -46,3 +46,27 @@ class UserComicViewSet(GenericViewSet, mixins.CreateModelMixin,
         instance = self.get_object()
         instance.delete()
         return Response(AppStatus.SUCCESS.message)
+
+    def list(self, request, *args, **kwargs):
+        # Get filter parameters from form data instead of query parameters
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Apply custom filtering from form data
+        comic = request.data.get('comic', None)
+
+        if comic:
+            # Handle comma-separated list of comic IDs
+            if isinstance(comic, str) and ',' in comic:
+                comic_ids = [int(id.strip()) for id in comic.split(',')]
+                queryset = queryset.filter(comic__in=comic_ids)
+            else:
+                queryset = queryset.filter(comic=comic)
+
+        # Apply pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
