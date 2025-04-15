@@ -1,0 +1,11 @@
+Django==5.2
+django_allauth==65.4.1
+djangorestframework==3.14.0
+djangorestframework_simplejwt==5.5.0
+drf_yasg==1.21.10
+loguru==0.7.3
+minio==7.2.15
+numpy==2.2.4
+Pillow==11.2.1
+python-dotenv==1.1.0
+Requests==2.32.3
