@@ -1,6 +1,9 @@
+from rest_framework.authentication import SessionAuthentication
+
 from comic_be.apps.comic.views_container import (
     permission_crud_comic, LimitOffsetPagination, GenericViewSet, MultiPartParser,
-    FormParser, UserComic, AppStatus, Response, mixins, OrderingFilter, DjangoFilterBackend
+    FormParser, UserComic, AppStatus, Response, mixins, OrderingFilter, DjangoFilterBackend,
+    CsrfExemptSessionAuthentication
 )
 from comic_be.apps.user.serializers_container.user_comic import (
     # UserComicSerializers, UserComicCreateSerializer, UserComicUpdateSerializer,
@@ -18,6 +21,7 @@ class UserComicViewSet(GenericViewSet, mixins.CreateModelMixin,
     filterset_class = UserComicFilter
     ordering_fields = ['-comic_id']
     ordering = ['-comic_id']
+    authentication_classes = [CsrfExemptSessionAuthentication, SessionAuthentication]
 
     def get_serializer_class(self):
             if self.request.method == 'POST':

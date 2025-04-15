@@ -31,8 +31,16 @@ SECRET_KEY = 'django-insecure-g4p4lo@-j@tc8cddndtjj^wa2l0-_2l)3!_s%ol258!&)t2)p4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if DEBUG:
+    SESSION_COOKIE_SECURE = False  # Cho phép cookie gửi qua HTTP
+    CSRF_COOKIE_SECURE = False    # Cho phép CSRF cookie gửi qua HTTP
+    SESSION_COOKIE_SAMESITE = 'Lax'  # Hoặc 'None' nếu cần cross-origin
+else:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
+
 ALLOWED_HOSTS = ['*']
-# CSRF_TRUSTED_ORIGINS = ['*']
 
 # Application definition
 
@@ -63,7 +71,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -156,18 +164,24 @@ SECRET_KEY_BUCKET = os.environ.get('SECRET_KEY')
 
 FE_URL = os.environ.get('FE_URL', 'http://localhost:8501')
 KEY_HASH_IMG = os.environ.get('KEY_HASH_IMG')
-# CORS_ALLOWED_ORIGINS = [
-#     "https://comic.daihiep.click",  # Miền của frontend
-# ]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'https://comic.daihiep.click',
+    'https://comic-be.vietgym.id.vn',
+]
 # CSRF_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = [
-    'https://comic.daihiep.click',  # Miền cần được thêm đầy đủ
+    'http://localhost:5173',
+    'https://comic.daihiep.click',
+    'https://comic-be.vietgym.id.vn'
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True  # Tự động redirect HTTP sang HTTPS (tùy chọn)
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True  # Tự động redirect HTTP sang HTTPS (tùy chọn)
 
 AUTH_USER_MODEL = 'user.User'
 

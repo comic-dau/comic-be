@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 from comic_be.apps.comic.views_container import (
     filters, UserComic, Comic, check_validate_genres, Chapter
 )
@@ -10,7 +12,7 @@ class ComicFilter(filters.FilterSet):
     is_favorite = filters.BooleanFilter(method="filter_favorite")
 
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
+        self.request = kwargs.get('request', None)
         super().__init__(*args, **kwargs)
 
     class Meta:
@@ -22,17 +24,17 @@ class ComicFilter(filters.FilterSet):
         check_validate_genres(value)
         return queryset.filter(genres__contains=value)
 
-    def filter_favorite(self, queryset, name, value):
-        # Chỉ xử lý khi value là True
-        if value is True and self.request and hasattr(self.request, 'user') and self.request.user.is_authenticated:
-            # Lấy danh sách comic_id mà user hiện tại đã đánh dấu là yêu thích
-            favorite_comic_ids = UserComic.objects.filter(
-                user=self.request.user,
-                is_favorite=True
-            ).values_list('comic_id', flat=True)
-
-            # Lọc queryset chỉ lấy những comic có trong danh sách yêu thích
-            return queryset.filter(id__in=favorite_comic_ids)
+    def filter_favorite(self, queryset, name, value, **kwargs):
+        if value is True:
+            if hasattr(self, 'request') and self.request and getattr(self.request, 'user',
+                                                                     None) and self.request.user.is_authenticated:
+                favorite_comic_ids = UserComic.objects.filter(
+                    user=self.request.user,
+                    is_favorite=True
+                ).values_list('comic_id', flat=True)
+                return queryset.filter(id__in=favorite_comic_ids)
+            else:
+                raise serializers.ValidationError("Authentication failed.")
         return queryset
 
 

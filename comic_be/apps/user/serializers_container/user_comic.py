@@ -42,6 +42,8 @@ class UserComicCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         current_user = self.context['request'].user
+        if not current_user or current_user.is_anonymous:
+            raise serializers.ValidationError('Authentication failed.')
         user_comic = UserComic.objects.filter(user=current_user, comic=validated_data['comic']).first()
         if not user_comic:
             user_comic = UserComic.objects.create(**validated_data, user=current_user,
