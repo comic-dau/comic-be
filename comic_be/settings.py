@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,7 +69,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     # 'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
@@ -157,17 +157,28 @@ SECRET_KEY_BUCKET = os.environ.get('SECRET_KEY')
 FE_URL = os.environ.get('FE_URL', 'http://localhost:8501')
 KEY_HASH_IMG = os.environ.get('KEY_HASH_IMG')
 # CORS_ALLOWED_ORIGINS = [
+#     "https://comic-fe.vietgym.id.vn",
 #     "https://comic.daihiep.click",  # Miền của frontend
 # ]
 # CSRF_COOKIE_SECURE = False
-CSRF_TRUSTED_ORIGINS = [
-    'https://comic.daihiep.click',  # Miền cần được thêm đầy đủ
-]
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = True
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True  # Tự động redirect HTTP sang HTTPS (tùy chọn)
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://comic-fe.vietgym.id.vn",
+    "https://comic.daihiep.click",
+    "http://localhost:5173",  # nếu đang dev local
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://comic-fe.vietgym.id.vn',
+    'https://comic.daihiep.click',
+    'http://localhost:8000',
+    'http://localhost:5173',
+    # Miền cần được thêm đầy đủ
+]
+
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True  # Tự động redirect HTTP sang HTTPS (tùy chọn)
 
 AUTH_USER_MODEL = 'user.User'
 

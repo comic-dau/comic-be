@@ -1,6 +1,6 @@
 ## The way to run project
-- Step 1: pip install poetry
-- Step 2: poetry install
+- Step 1: Make VENV
+- Step 2: `pip install -r requirements.txt`
 - Step 3: `python manage.py makemigrations`
 - Step 4: `python manage.py migrate`
 - Step 5: `python manage.py runserver`

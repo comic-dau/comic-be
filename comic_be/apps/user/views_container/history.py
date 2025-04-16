@@ -21,32 +21,40 @@ class HistoryViewSet(GenericViewSet, mixins.CreateModelMixin,
         user = self.request.user
         if user.is_anonymous:
             return History.objects.none()
-        comic = self.request.query_params.get("comic", None)
-        chapter = self.request.query_params.get("chapter", None)
+
         queryset = History.objects.filter().all()
+
+        if not user.is_superuser:
+            queryset = queryset.filter(user=user)
+
+        queryset = queryset.order_by("-created_at")
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        user = request.user
+
+        # Get filter parameters from form data instead of query parameters
+        comic = request.data.get("comic", None)
+        chapter = request.data.get("chapter", None)
 
         if comic:
             queryset = queryset.filter(comic=comic)
         if chapter:
             queryset = queryset.filter(chapter=chapter)
         if user.is_superuser:
-            user_query = self.request.query_params.get("user", None)
+            user_query = request.data.get("user", None)
             if user_query:
                 queryset = queryset.filter(user=user_query)
-        else:
-            queryset = queryset.filter(user=user)
 
-        queryset = queryset.order_by("-created_at")
-        return queryset
+        # Apply pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter(name="comic", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
-            openapi.Parameter(name="chapter", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
-            openapi.Parameter(name="users", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER), ]
-    )
-    def list(self, request, *args, **kwargs):
-        return super().list(self, request, *args, **kwargs)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def get_object(self):
         history_id = self.kwargs['pk']
