@@ -4,7 +4,7 @@ from comic_be.apps.comic.serializers import (
     AuthorSerializers, AuthorCreateSerializer, AuthorUpdateSerializer, serializers
 )
 from comic_be.apps.comic.views_container import (
-    swagger_auto_schema, openapi, permission_crud_comic,
+    swagger_auto_schema, openapi, permission_crud_comic, CsrfExemptSessionAuthentication, SessionAuthentication,
     LimitOffsetPagination, GenericViewSet, MultiPartParser, FormParser, Author, AppStatus, Response
 )
 
@@ -15,6 +15,7 @@ class AuthorViewSet(GenericViewSet, mixins.CreateModelMixin,
     # permission_classes = [permissions.IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
     pagination_class = LimitOffsetPagination
+    authentication_classes = [CsrfExemptSessionAuthentication, SessionAuthentication]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':

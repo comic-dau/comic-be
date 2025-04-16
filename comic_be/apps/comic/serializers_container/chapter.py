@@ -48,6 +48,7 @@ class ChapterSerializers(serializers.ModelSerializer):
 class ChapterCreateSerializer(serializers.ModelSerializer):
     file_image = serializers.FileField(required=True, write_only=True)
     src_image = serializers.CharField(read_only=True)
+    title = serializers.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -55,7 +56,7 @@ class ChapterCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chapter
-        fields = ['comic', 'number', 'title', 'src_image', 'file_image']
+        fields = ['comic', 'title', 'src_image', 'file_image']
 
     @staticmethod
     def validate_file_image(value):
@@ -69,15 +70,20 @@ class ChapterCreateSerializer(serializers.ModelSerializer):
         current_user = self.context['request'].user
         permission_crud_comic(current_user)
         comic = validated_data.get('comic', None)
-        number_chapter = validated_data.get('number', None)
-        if not number_chapter:
-            raise serializers.ValidationError("Require number chapter.")
+
+        validated_data['number'] = comic.total_chapter + 1
+        if not validated_data.get('title', None):
+            validated_data['title'] = f"Chapter {validated_data['number']}"
+        else:
+            validated_data['title'] = f"Chapter {validated_data['number']}: " + validated_data['title']
 
         zip_file = validated_data.pop('file_image')
-        validated_data['src_image'] = provider_src_image(self.minio_cli, zip_file, comic.name, number_chapter)
+        validated_data['src_image'] = provider_src_image(self.minio_cli, zip_file, comic.name, validated_data['number'])
 
         chapter = Chapter.objects.create(**validated_data)
-        comic.update_at = timezone.now()
+
+        comic.total_chapter += 1
+        comic.updated_at = timezone.now()
         comic.save()
         return chapter
 

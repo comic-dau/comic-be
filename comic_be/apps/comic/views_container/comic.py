@@ -3,7 +3,7 @@ from comic_be.apps.comic.serializers import (
 )
 from comic_be.apps.comic.views_container import (
     permission_crud_comic, LimitOffsetPagination, GenericViewSet, MultiPartParser, FormParser, Comic, AppStatus,
-    Response, mixins, DjangoFilterBackend, OrderingFilter
+    Response, mixins, DjangoFilterBackend, OrderingFilter, CsrfExemptSessionAuthentication, SessionAuthentication
 )
 from comic_be.apps.comic.views_container.filter import ComicFilter
 
@@ -16,6 +16,7 @@ class ComicViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixi
     filterset_class = ComicFilter
     ordering_fields = ["name", "updated_at"]
     ordering = ["-updated_at"]
+    authentication_classes = [CsrfExemptSessionAuthentication, SessionAuthentication]
 
 
     def get_serializer_class(self):
