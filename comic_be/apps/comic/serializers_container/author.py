@@ -16,6 +16,7 @@ class AuthorBaseSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.minio_cli = MinioStorage()
+        self.bucket = settings.STORAGE_BUCKET
 
     class Meta:
         model = Author
@@ -58,7 +59,7 @@ class AuthorUpdateSerializer(AuthorBaseSerializer):
             author_exist = Author.objects.filter(name=validated_data['name']).first()
             if author_exist:
                 raise serializers.ValidationError(AppStatus.AUTHOR_NAME_ALREADY_EXIST.message)
-            name_author = author_exist.name
+            name_author = validated_data.get('name')
 
         image_avatar = validated_data.pop('image_avatar', None)
         if image_avatar:

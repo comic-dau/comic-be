@@ -17,6 +17,7 @@ class ChapterViewSet(GenericViewSet, mixins.CreateModelMixin,
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = ChapterFilter
     ordering = ["-created_at"]
+    authentication_classes = [CsrfExemptSessionAuthentication, SessionAuthentication]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
