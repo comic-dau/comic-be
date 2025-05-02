@@ -177,8 +177,9 @@ CSRF_TRUSTED_ORIGINS = [
     # Miền cần được thêm đầy đủ
 ]
 
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# SECURE_SSL_REDIRECT = True  # Tự động redirect HTTP sang HTTPS (tùy chọn)
+# Explicitly disable SSL settings to prevent HTTPS redirection
+SECURE_PROXY_SSL_HEADER = None
+SECURE_SSL_REDIRECT = False
 
 AUTH_USER_MODEL = 'user.User'
 

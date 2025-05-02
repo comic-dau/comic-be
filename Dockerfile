@@ -28,4 +28,5 @@ RUN chmod +x /app/docker-entrypoint.sh
 EXPOSE 8000
 
 # Run migrations and start the application
-CMD ["bash", "-c", "sleep 10 && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+# Use --nothreading and --noreload to avoid SSL issues on Windows Docker
+CMD ["bash", "-c", "sleep 10 && python manage.py migrate && python manage.py runserver 0.0.0.0:8000 --nothreading --noreload"]

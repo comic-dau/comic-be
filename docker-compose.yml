@@ -23,6 +23,7 @@ services:
       - STORAGE_ACCESS_KEY=${STORAGE_ACCESS_KEY}
       - STORAGE_SECRET_KEY=${STORAGE_SECRET_KEY}
       - STORAGE_BUCKET=${STORAGE_BUCKET}
+      - STORAGE_SECURE=False
     networks:
       - comic_network
     volumes:
