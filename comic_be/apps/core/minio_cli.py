@@ -45,7 +45,10 @@ class MinioStorage:
             content_type=content_type
         )
         if return_url:
-            return f"{self.domain}/{bucket}/{filename}"
+            domain = self.domain
+            if self.domain == "minio:9000":
+                domain = "localhost:9000"
+            return f"{domain}/{bucket}/{filename}"
         return None
 
     def upload_file(self, bucket: str, filename: str, file_obj, return_url: bool = False):
