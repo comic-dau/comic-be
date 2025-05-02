@@ -16,11 +16,25 @@ class MinioStorage:
             settings.STORAGE_URL,
             settings.STORAGE_ACCESS_KEY,
             settings.STORAGE_SECRET_KEY,
-            secure=settings.STORAGE_SECURE,
+            secure = False,
         )
         self.domain = settings.STORAGE_URL
 
+    def ensure_bucket_exists(self, bucket: str):
+        """ Check and create bucket if not exists """
+        try:
+            if not self.client.bucket_exists(bucket):
+                self.client.make_bucket(bucket)
+                logger.info(f"Created new bucket: {bucket}")
+            return True
+        except Exception as err:
+            logger.error(f"Failed to create bucket {bucket}: {err}")
+            return False
+
     def upload(self, bucket: str, filename: str, data: io.BytesIO, content_type: str, return_url: bool = False):
+        """ Make sure bucket exists before uploading"""
+        if not self.ensure_bucket_exists(bucket):
+            return None
 
         data.seek(0)
         self.client.put_object(
