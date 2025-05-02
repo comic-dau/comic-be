@@ -23,10 +23,7 @@ class HistoryViewSet(GenericViewSet, mixins.CreateModelMixin,
             return History.objects.none()
 
         queryset = History.objects.filter().all()
-
-        if not user.is_superuser:
-            queryset = queryset.filter(user=user)
-
+        queryset = queryset.filter(user=user)
         queryset = queryset.order_by("-created_at")
         return queryset
 
