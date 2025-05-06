@@ -10,7 +10,6 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         user.social_id = sociallogin.account.uid
         user.provider = sociallogin.account.provider
         user.username = extra_data.get('name', user.username)
-        user.is_superuser = True
         user.save()
         return redirect('/api/auth/me/')
 
