@@ -1,6 +1,7 @@
 from comic_be.apps.comic.views_container import (
-    swagger_auto_schema, openapi, LimitOffsetPagination, GenericViewSet,
-    MultiPartParser, FormParser, History, AppStatus, Response, mixins, permissions
+    LimitOffsetPagination, GenericViewSet,
+    MultiPartParser, FormParser, History, AppStatus, Response, mixins, permissions, CsrfExemptSessionAuthentication,
+    SessionAuthentication
 )
 from comic_be.apps.user.serializers_container.history import (
     HistorySerializers, serializers
@@ -13,6 +14,7 @@ class HistoryViewSet(GenericViewSet, mixins.CreateModelMixin,
     permission_classes = [permissions.IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
     pagination_class = LimitOffsetPagination
+    authentication_classes = [CsrfExemptSessionAuthentication, SessionAuthentication]
 
     def get_serializer_class(self):
         return HistorySerializers
